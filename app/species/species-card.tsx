@@ -13,9 +13,27 @@ can cause errors with matching props and state in child components if the list o
 import { Button } from "@/components/ui/button";
 import type { Database } from "@/lib/schema";
 import Image from "next/image";
+import { useState } from "react";
+
 type Species = Database["public"]["Tables"]["species"]["Row"];
+import {
+  Dialog,
+  DialogPortal,
+  DialogOverlay,
+  DialogClose,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 export default function SpeciesCard({ species }: { species: Species }) {
+  const [open, setOpen] = useState<boolean>(false);
+  const handleLearnMoreClick = () => {
+    setOpen(true);
+  };
   return (
     <div className="m-4 w-72 min-w-72 flex-none rounded border-2 p-3 shadow">
       {species.image && (
@@ -27,7 +45,23 @@ export default function SpeciesCard({ species }: { species: Species }) {
       <h4 className="text-lg font-light italic">{species.common_name}</h4>
       <p>{species.description ? species.description.slice(0, 150).trim() + "..." : ""}</p>
       {/* Replace the button with the detailed view dialog. */}
-      <Button className="mt-3 w-full">Learn More</Button>
+      <Button className="mt-3 w-full" onClick={handleLearnMoreClick}>Learn More</Button>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-h-screen overflow-y-auto sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle><h1 className="mt-3 text-3xl font-bold">Species Information</h1></DialogTitle>
+            <DialogTitle><h3 className="mt-3 text-2xl font-semibold">Scientific Name: {species.scientific_name}</h3></DialogTitle>
+            <DialogTitle><h4 className="text-lg font-light italic">Common Name: {species.common_name}</h4></DialogTitle>
+            </DialogHeader>
+            <DialogDescription>
+              <h5 className="text-lg font-light">Kingdom: {species.kingdom}</h5>
+              <h5 className="text-lg font-light">Total Population: {species.total_population}</h5>
+              <h5 className="text-lg font-light">Description: {species.description}</h5>
+            </DialogDescription>
+          </DialogContent>
+        </Dialog>
+
     </div>
   );
 }
