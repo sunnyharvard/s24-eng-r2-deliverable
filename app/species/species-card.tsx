@@ -31,8 +31,13 @@ import {
 
 export default function SpeciesCard({ species }: { species: Species }) {
   const [open, setOpen] = useState<boolean>(false);
+  const[openEdit, setEditOpen] = useState<boolean>(false);
   const handleLearnMoreClick = () => {
     setOpen(true);
+  };
+  const handleEdit = () => {
+    setOpen(false);
+    setEditOpen(true);
   };
   return (
     <div className="m-4 w-72 min-w-72 flex-none rounded border-2 p-3 shadow">
@@ -58,7 +63,14 @@ export default function SpeciesCard({ species }: { species: Species }) {
               <h5 className="text-lg font-light">Kingdom: {species.kingdom}</h5>
               <h5 className="text-lg font-light">Total Population: {species.total_population}</h5>
               <h5 className="text-lg font-light">Description: {species.description}</h5>
+              <Button className="mt-2 w-full" onClick={handleEdit}>Edit</Button>
             </DialogDescription>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={openEdit} onOpenChange={setEditOpen}>
+          <DialogContent className="max-h-screen overflow-y-auto sm:max-w-[600px]">
+            <DialogTitle>Test</DialogTitle>
           </DialogContent>
         </Dialog>
 
