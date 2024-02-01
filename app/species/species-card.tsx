@@ -63,14 +63,27 @@ export default function SpeciesCard({ species }: { species: Species }) {
               <h5 className="text-lg font-light">Kingdom: {species.kingdom}</h5>
               <h5 className="text-lg font-light">Total Population: {species.total_population}</h5>
               <h5 className="text-lg font-light">Description: {species.description}</h5>
-              <Button className="mt-2 w-full" onClick={handleEdit}>Edit</Button>
+              <Button className="mt-3 w-full" onClick={handleEdit}>Edit</Button>
             </DialogDescription>
           </DialogContent>
         </Dialog>
 
         <Dialog open={openEdit} onOpenChange={setEditOpen}>
           <DialogContent className="max-h-screen overflow-y-auto sm:max-w-[600px]">
-            <DialogTitle>Test</DialogTitle>
+            <DialogHeader>
+            <DialogTitle>Edit Species</DialogTitle>
+            <DialogDescription>
+              Edit your species here. Click &quot;Submit Edit&quot; below when you&apos;re done.
+            </DialogDescription>
+          </DialogHeader>
+            <div className="flex">
+            <Button type="submit" className="ml-1 mr-1 flex-auto">
+              Submit Edit
+            </Button>
+            <Button type="button" className="ml-1 mr-1 flex-auto" variant="secondary">
+                Cancel
+            </Button>
+            </div>
           </DialogContent>
         </Dialog>
 
