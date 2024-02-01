@@ -34,10 +34,16 @@ export default function SpeciesCard({ species }: { species: Species }) {
   const[openEdit, setEditOpen] = useState<boolean>(false);
   const handleLearnMoreClick = () => {
     setOpen(true);
+    setEditOpen(false);
   };
   const handleEdit = () => {
     setOpen(false);
     setEditOpen(true);
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+    setEditOpen(false);
   };
   return (
     <div className="m-4 w-72 min-w-72 flex-none rounded border-2 p-3 shadow">
@@ -80,7 +86,7 @@ export default function SpeciesCard({ species }: { species: Species }) {
             <Button type="submit" className="ml-1 mr-1 flex-auto">
               Submit Edit
             </Button>
-            <Button type="button" className="ml-1 mr-1 flex-auto" variant="secondary">
+            <Button type="button" className="ml-1 mr-1 flex-auto" variant="secondary" onClick={handleCancel}>
                 Cancel
             </Button>
             </div>
