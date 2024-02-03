@@ -1,3 +1,4 @@
+// Import libraries and components
 import { Separator } from "@/components/ui/separator";
 import { TypographyH2 } from "@/components/ui/typography";
 import { createServerSupabaseClient } from "@/lib/server-utils";
@@ -19,18 +20,17 @@ export default async function SpeciesList() {
 
   // Obtain the ID of the currently signed-in user
   const sessionId = session.user.id;
-
-  const { data: species } = await supabase.from("species").select("*").order("id", { ascending: false });
+  const { data: species } = await supabase.from("species").select("*").order("id");
 
   return (
     <>
       <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
         <TypographyH2>Species List</TypographyH2>
-        <AddSpeciesDialog userId={sessionId} />
+        <AddSpeciesDialog key={new Date().getTime()} userId={sessionId} />
       </div>
       <Separator className="my-4" />
       <div className="flex flex-wrap justify-center">
-        {species?.map((species) => <SpeciesCard key={species.id} species={species} />)}
+        {species?.map((species) => <SpeciesCard key={species.id} userID={sessionId} species={species} />)}
       </div>
     </>
   );
