@@ -74,7 +74,7 @@ export default function DeleteSpecies(species: Species) {
                 <DialogTitle>Are you sure you want to delete?</DialogTitle>
               </DialogHeader>
               <DialogDescription>
-                This card will be deleted immediately and permanently. You can't undo this action.
+                This card will be deleted immediately and permanently. You can not undo this action.
               </DialogDescription>
               <DialogFooter>
                 <div className="flex">
