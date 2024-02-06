@@ -16,8 +16,8 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { createBrowserSupabaseClient } from "@/lib/client-utils";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState, type BaseSyntheticEvent } from "react";
 import { useForm } from "react-hook-form";
@@ -28,33 +28,38 @@ const kingdoms = z.enum(["Animalia", "Plantae", "Fungi", "Protista", "Archaea", 
 
 // Use Zod to define the shape + requirements of a Species entry; used in form validation
 const speciesSchema = z.object({
-  common_name: z
-    .string()
-    .nullable()
-    .transform((val) => (val?.trim() === "" ? null : val?.trim())),
-  description: z
-    .string()
-    .nullable()
-    .transform((val) => (val?.trim() === "" ? null : val?.trim())),
-  kingdom: kingdoms,
   scientific_name: z
     .string()
     .trim()
     .min(1)
     .transform((val) => val?.trim()),
+  common_name: z
+    .string()
+    .nullable()
+    .transform((val) => (val?.trim() === "" ? null : val?.trim())),
+  kingdom: kingdoms,
   total_population: z.number().int().positive().min(1).optional(),
   image: z
     .string()
     .url()
     .nullable()
     .transform((val) => val?.trim()),
+  description: z
+    .string()
+    .nullable()
+    .transform((val) => (val?.trim() === "" ? null : val?.trim())),
 });
 
 type FormData = z.infer<typeof speciesSchema>;
 
 // Default form values
 const defaultValues: Partial<FormData> = {
+  scientific_name: "",
+  common_name: null,
   kingdom: "Animalia",
+  total_population: 1,
+  image: "",
+  description: null,
 };
 
 // Add species function
@@ -97,13 +102,18 @@ export default function AddSpeciesDialog({ userId }: { userId: string }) {
       }
 
       // Reset form values to the default (empty) values.
-      form.reset(input);
+      form.reset(defaultValues);
 
       // Close dialog
       setOpen(false);
 
       // Refresh all server components in the current route
       router.refresh();
+
+      return toast({
+        title: "New species added!",
+        description: "Successfully added " + input.scientific_name + ".",
+      });
     };
 
   return (

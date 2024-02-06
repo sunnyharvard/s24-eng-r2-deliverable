@@ -31,23 +31,18 @@ const kingdoms = z.enum(["Animalia", "Plantae", "Fungi", "Protista", "Archaea", 
 
 // Use Zod to define the shape + requirements of a Species entry; used in form validation
 const speciesSchema = z.object({
-  common_name: z
-    .string()
-    .nullable()
-    .optional()
-    .transform((val) => (val?.trim() === "" ? null : val?.trim())),
-  description: z
-    .string()
-    .nullable()
-    .optional()
-    .transform((val) => (val?.trim() === "" ? null : val?.trim())),
-  kingdom: kingdoms,
   scientific_name: z
     .string()
     .trim()
     .min(1)
     .optional()
     .transform((val) => val?.trim()),
+  common_name: z
+    .string()
+    .nullable()
+    .optional()
+    .transform((val) => (val?.trim() === "" ? null : val?.trim())),
+  kingdom: kingdoms,
   total_population: z.number().int().positive().min(1).optional(),
   image: z
     .string()
@@ -55,13 +50,23 @@ const speciesSchema = z.object({
     .nullable()
     .optional()
     .transform((val) => val?.trim()),
+  description: z
+    .string()
+    .nullable()
+    .optional()
+    .transform((val) => (val?.trim() === "" ? null : val?.trim())),
 });
 
 type FormData = z.infer<typeof speciesSchema>;
 
 // Default form values
 const defaultValues: Partial<FormData> = {
-  kingdom: "Animalia",
+    scientific_name: "",
+    common_name: null,
+    kingdom: "Animalia",
+    total_population: 1,
+    image: "",
+    description: null,
 };
 
 // Edit species function
@@ -112,6 +117,11 @@ export default function EditSpeciesDialog({ species, userID }: { species: Specie
 
         // Refresh all server components in the current route
         router.refresh();
+
+        return toast({
+            title: "Species edited!",
+            description: "Successfully edited " + species.scientific_name + ".",
+          });
     };
 
   return (

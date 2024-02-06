@@ -47,6 +47,11 @@ export default function DeleteSpecies(species: Species) {
 
         // Refresh all server components in the current route 
         router.refresh();
+
+        return toast({
+            title: "Species deleted!",
+            description: "Successfully deleted " + species.scientific_name + ".",
+          });
     };
 
   // Control open/closed state of the dialog
